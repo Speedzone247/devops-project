@@ -11,3 +11,4 @@ secrets.yml
 .vscode/
 *.swp
 *.swo
+.vault_pass
