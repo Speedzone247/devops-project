@@ -19,6 +19,11 @@ spec:
       labels:
         app: devops-app
     spec:
+      serviceAccountName: devops-app
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: devops-app
         image: ghcr.io/speedzone247/devops-project:latest
@@ -34,6 +39,12 @@ spec:
           limits:
             cpu: "500m"
             memory: "256Mi"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+              - ALL
         livenessProbe:
           httpGet:
             path: /health
