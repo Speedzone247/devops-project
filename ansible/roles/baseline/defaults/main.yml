@@ -1,0 +1,9 @@
+---
+baseline_packages:
+  - curl
+  - wget
+  - vim
+  - git
+  - python3-pip
+  - net-tools
+  - bind-utils

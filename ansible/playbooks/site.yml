@@ -1,0 +1,7 @@
+---
+- name: Configure all servers
+  hosts: all
+  gather_facts: true
+  roles:
+    - role: baseline
+      tags: baseline

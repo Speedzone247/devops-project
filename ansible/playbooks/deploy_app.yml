@@ -1,0 +1,24 @@
+---
+- name: Deploy application container
+  hosts: webservers
+  vars:
+    app_version: "{{ lookup('env', 'APP_VERSION') | default('latest') }}"
+    image_name: "ghcr.io/{{ lookup('env', 'GITHUB_REPOSITORY') | default('speedzone247/devops-project') }}"
+
+  tasks:
+    - name: Pull latest image
+      containers.podman.podman_image:
+        name: "{{ image_name }}:{{ app_version }}"
+        pull: true
+        state: present
+
+    - name: Run application container
+      containers.podman.podman_container:
+        name: devops-app
+        image: "{{ image_name }}:{{ app_version }}"
+        state: started
+        restart_policy: always
+        ports:
+          - "5000:5000"
+        env:
+          APP_VERSION: "{{ app_version }}"

@@ -1,0 +1,37 @@
+---
+- name: Ensure firewalld is running
+  ansible.builtin.systemd:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Open HTTP and HTTPS ports
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: true
+  loop:
+    - http
+    - https
+  become: true
+
+- name: Open app port 5000
+  ansible.posix.firewalld:
+    port: 5000/tcp
+    permanent: true
+    state: enabled
+    immediate: true
+  become: true
+
+- name: Ensure SELinux is enforcing
+  ansible.posix.selinux:
+    policy: targeted
+    state: enforcing
+  become: true
+
+- name: Install required packages
+  ansible.builtin.dnf:
+    name: "{{ baseline_packages }}"
+    state: present
+  become: true
